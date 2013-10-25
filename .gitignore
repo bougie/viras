@@ -3,4 +3,5 @@
 *._.DS_Store
 .DS_Store
 *.DS_Store
-*.sample.py
+viras/local_settings.py
+viras/my_settings.py
