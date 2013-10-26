@@ -53,3 +53,19 @@ def add(request):
 			return HttpResponse(status=400)
 	else:
 		return HttpResponse(status=501)
+
+def delete(request, cid):
+	if request.method == 'DELETE':
+		try:
+			cte = Compute.objects.get(id=cid)
+		except:
+			return HttpResponse(status=400)
+
+		try:
+			cte.delete()
+
+			return HttpResponse(status=200)
+		except:
+			return HttpResponse(status=500)
+	else:
+		return HttpResponse(status=501)
