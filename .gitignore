@@ -5,3 +5,4 @@
 *.DS_Store
 viras/local_settings.py
 viras/my_settings.py
+db.sqlite

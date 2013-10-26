@@ -7,4 +7,4 @@ class ComputeForm(forms.Form):
 	vcpu = forms.IntegerField()
 	memory = forms.IntegerField()
 	disk  = forms.IntegerField()
-	techno = forms.CharField(max_length=6)
+	ctype = forms.CharField(max_length=6)
