@@ -2,5 +2,6 @@ from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
 	url(r'^$', 'compute.views.index'),
-	url(r'^([0-9]+)$', 'compute.views.change'),
+	url(r'^(.+)/$', 'compute.views.settings'),
+	url(r'^(.+)$', 'compute.views.settings'),
 )

@@ -8,3 +8,9 @@ class ComputeForm(forms.Form):
 	memory = forms.IntegerField()
 	disk  = forms.IntegerField()
 	ctype = forms.CharField(max_length=6)
+
+class ComputeEditForm(forms.Form):
+	vcpu = forms.IntegerField()
+	memory = forms.IntegerField()
+	disk  = forms.IntegerField()
+	ctype = forms.CharField(max_length=6)
