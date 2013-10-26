@@ -2,7 +2,7 @@
 
 ### Compute
 
-* GET /compute : liste de tous les computes
+* GET /compute : lister tous les computes
 * POST /compute : creer un compute
   * name : nom du compute
   * vcpu : nom de CPU
@@ -11,6 +11,6 @@
   * ctype : technologie de virtualisation (xen, jails, zone, vmware)
 
 
-* GET /compute/{compute_name} : afficher les details d'un compute
-* PUT /compute/{compute_name} : edition d'un compute 
-* DELETE /compute/{compute_name} : suppression d'un compute
+* GET /compute/{compute_name} : afficher un compute
+* PUT /compute/{compute_name} : editer un compute 
+* DELETE /compute/{compute_name} : supprimer un compute
