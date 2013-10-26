@@ -32,7 +32,7 @@ def index(request):
 					form.cleaned_data['disk'],
 					form.cleaned_data['ctype'])
 
-				return HttpResponse(status=200)
+				return HttpResponse(status=201)
 			except:
 				return HttpResponse(status=500)
 		else:
