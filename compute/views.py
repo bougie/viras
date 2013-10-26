@@ -14,6 +14,7 @@ def index(request):
 		_data = Compute.objects.all()
 		for d in _data:
 			data.append({
+				'id': d.id,
 				'name': d.name,
 				'vcpu': d.vcpu,
 				'memory': d.memory,
