@@ -114,7 +114,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'compute'
+	'compute',
+	'instance'
 )
 
 # A sample logging configuration. The only tangible logging
