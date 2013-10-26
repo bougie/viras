@@ -3,7 +3,7 @@
 from django.db import models
 
 class Compute(models.Model):
-	name = models.CharField(max_length=42)
+	name = models.CharField(max_length=42, unique=True)
 	vcpu = models.IntegerField()
 	memory = models.IntegerField()
 	disk  = models.IntegerField()
