@@ -27,11 +27,7 @@ def index(request):
 			'results': data
 		}
 		return HttpResponse(simplejson.dumps(response_data), content_type="application/json")
-	else:
-		return HttpResponse(status=501)
-
-def add(request):
-	if request.method == 'POST':
+	elif request.method == 'POST':
 		form = ComputeForm(request.POST)
 
 		if form.is_valid():
@@ -54,7 +50,7 @@ def add(request):
 	else:
 		return HttpResponse(status=501)
 
-def delete(request, cid):
+def change(request, cid):
 	if request.method == 'DELETE':
 		try:
 			cte = Compute.objects.get(id=cid)
