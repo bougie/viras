@@ -9,13 +9,21 @@ from compute.forms import ComputeForm
 def index(request):
 	if request.method == 'GET':
 		response_data = {}
-
-		data = Compute.objects.all()
-		if len(data) == 0:
-			data = ['']
+		data = []
+		
+		_data = Compute.objects.all()
+		for d in _data:
+			data.append({
+				'name': d.name,
+				'vcpu': d.vcpu,
+				'memory': d.memory,
+				'disk': d.disk,
+				'ctype': d.ctype
+			})
 
 		response_data = {
-			"results": data
+			'count': len(data),
+			'results': data
 		}
 		return HttpResponse(simplejson.dumps(response_data), content_type="application/json")
 	else:
