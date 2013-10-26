@@ -6,8 +6,8 @@
 * POST /compute : creer un compute
   * name : nom du compute
   * vcpu : nom de CPU
-  * memory : taille de la RAm en G
-  * disk : taille du disque dur en G
+  * memory : taille de la RAm en Mo
+  * disk : taille du disque dur en Go
   * ctype : technologie de virtualisation (xen, jails, zone, vmware)
 
 
