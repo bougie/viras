@@ -2,6 +2,7 @@
 import logging
 
 from lib.exception import ErrorException
+from lib.response import ErrorResponse
 
 from django.http import HttpResponse, QueryDict
 from django.utils import simplejson
@@ -22,12 +23,14 @@ def index(request):
 				'count': len(data),
 				'results': data
 			}
-			return HttpResponse(simplejson.dumps(response_data), content_type="application/json")
+			return HttpResponse(
+				simplejson.dumps(response_data),
+				content_type="application/json")
 		except ErrorException, e:
-			return HttpResponse(status=e.code)
+			return ErrorResponse(status=e.code)
 		except Exception, e:
 			logger.error(str(e))
-			return HttpResponse(status=500)
+			return ErrorResponse(status=500)
 	elif request.method == 'POST':
 		form = FlavourForm(request.POST)
 
@@ -41,14 +44,14 @@ def index(request):
 
 				return HttpResponse(status=201)
 			except ErrorException, e:
-				return HttpResponse(status=e.code)
+				return ErrorResponse(status=e.code)
 			except Exception, e:
 				logger.error(str(e))
-				return HttpResponse(status=500)
+				return ErrorResponse(status=500)
 		else:
-			return HttpResponse(status=400)
+			return ErrorResponse(status=400)
 	else:
-		return HttpResponse(status=501)
+		return ErrorResponse(status=501)
 
 def settings(request, fid):
 	if request.method == 'GET':
@@ -61,12 +64,14 @@ def settings(request, fid):
 				'count': len(data),
 				'results': data
 			}
-			return HttpResponse(simplejson.dumps(response_data), content_type="application/json")
+			return HttpResponse(
+				simplejson.dumps(response_data),
+				content_type="application/json")
 		except ErrorException, e:
-			return HttpResponse(status=e.code)
+			return ErrorResponse(status=e.code)
 		except Exception, e:
 			logger.error(str(e))
-			return HttpResponse(status=404)
+			return ErrorResponse(status=404)
 	elif request.method == 'PUT':
 		params = QueryDict(request.body, request.encoding)
 		form = FlavourEditForm(params)
@@ -81,21 +86,21 @@ def settings(request, fid):
 
 				return HttpResponse(status=200)
 			except ErrorException, e:
-				return HttpResponse(status=e.code)
+				return ErrorResponse(status=e.code)
 			except Exception, e:
 				logger.error(str(e))
-				return HttpResponse(status=500)
+				return ErrorResponse(status=500)
 		else:
-			return HttpResponse(status=400)
+			return ErrorResponse(status=400)
 	elif request.method == 'DELETE':
 		try:
 			delete(fid)
 
 			return HttpResponse(status=200)
 		except ErrorException, e:
-			return HttpResponse(status=e.code)
+			return ErrorResponse(status=e.code)
 		except Exception, e:
 			logger.error(str(e))
-			return HttpResponse(status=500)
+			return ErrorResponse(status=500)
 	else:
-		return HttpResponse(status=501)
+		return ErrorResponse(status=501)
