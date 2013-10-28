@@ -1,10 +1,15 @@
 #-*- coding: utf8 -*-
+import logging
+
+from lib.exception import ErrorException
 
 from django.http import HttpResponse, QueryDict
 from django.utils import simplejson
 
 from flavour.forms import FlavourForm, FlavourEditForm
 from flavour.utils import add, delete, edit, get, get_all
+
+logger = logging.getLogger("app")
 
 def index(request):
 	if request.method == 'GET':
@@ -18,7 +23,10 @@ def index(request):
 				'results': data
 			}
 			return HttpResponse(simplejson.dumps(response_data), content_type="application/json")
-		except:
+		except ErrorException, e:
+			return HttpResponse(status=e.code)
+		except Exception, e:
+			logger.error(str(e))
 			return HttpResponse(status=500)
 	elif request.method == 'POST':
 		form = FlavourForm(request.POST)
@@ -32,7 +40,10 @@ def index(request):
 					form.cleaned_data['disk'])
 
 				return HttpResponse(status=201)
-			except:
+			except ErrorException, e:
+				return HttpResponse(status=e.code)
+			except Exception, e:
+				logger.error(str(e))
 				return HttpResponse(status=500)
 		else:
 			return HttpResponse(status=400)
@@ -51,7 +62,10 @@ def settings(request, fid):
 				'results': data
 			}
 			return HttpResponse(simplejson.dumps(response_data), content_type="application/json")
-		except:
+		except ErrorException, e:
+			return HttpResponse(status=e.code)
+		except Exception, e:
+			logger.error(str(e))
 			return HttpResponse(status=404)
 	elif request.method == 'PUT':
 		params = QueryDict(request.body, request.encoding)
@@ -66,7 +80,10 @@ def settings(request, fid):
 					form.cleaned_data['disk'])
 
 				return HttpResponse(status=200)
-			except:
+			except ErrorException, e:
+				return HttpResponse(status=e.code)
+			except Exception, e:
+				logger.error(str(e))
 				return HttpResponse(status=500)
 		else:
 			return HttpResponse(status=400)
@@ -75,7 +92,10 @@ def settings(request, fid):
 			delete(fid)
 
 			return HttpResponse(status=200)
-		except:
+		except ErrorException, e:
+			return HttpResponse(status=e.code)
+		except Exception, e:
+			logger.error(str(e))
 			return HttpResponse(status=500)
 	else:
 		return HttpResponse(status=501)

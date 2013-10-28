@@ -33,6 +33,7 @@
 
 ### Instance
 
+* GET /compute/{compute_name}/instance : lister les instance d'un compute
 * POST /compute/{compute_name}/instance : creer une instance
   * name : nom de l'instance
   * desc : description de l'instance

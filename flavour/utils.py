@@ -19,26 +19,33 @@ def add(name, vcpu, memory, disk):
 
 		flv.save()
 	else:
-		raise
+		raise ErrorException(500, "Unable to create new flavour")
 
 def delete(name):
 	try:
 		flv = Flavour.objects.get(name=name)
+	except:
+		raise ErrorException(404, "Unable to get flavour")
+
+	try:
 		flv.delete()
 	except:
-		raise
+		raise ErrorException(500, "Unable to delete flavour")
 
 def edit(name, vcpu, memory, disk):
 	try:
 		flv = Flavour.objects.get(name=name)
+	except:
+		raise ErrorException(404, "Unable to get flavour")
 
+	try:
 		flv.vcpu = vcpu
 		flv.memory = memory
 		flv.disk = disk
 
 		flv.save()
 	except:
-		raise
+		raise ErrorException(500, "Unable to set flavour")
 
 def get(name):
 	try:
@@ -52,7 +59,7 @@ def get(name):
 			'disk': d.disk
 		}
 	except:
-		raise
+		raise ErrorException(404, "Unable to get flavour")
 
 	return flv
 
@@ -71,6 +78,6 @@ def get_all():
 				'disk': d.disk
 			})
 	except:
-		raise
+		raise ErrorException(500, "Unable to get flavours")
 
 	return data

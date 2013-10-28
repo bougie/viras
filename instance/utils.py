@@ -1,4 +1,5 @@
 # -*- coding: utf8 -*-
+from lib.exception import ErrorException
 
 from instance.models import Instance
 
@@ -17,12 +18,12 @@ def add(uid, cname, name, desc, flavour_name):
 		try:
 			flv = fl.get(flavour_name)
 		except:
-			raise
+			raise ErrorException(404, "No flavour found")
 
 		try:
 			cte = Compute.objects.get(name=cname)
 		except:
-			raise
+			raise ErrorException(404, "No compute found")
 
 		ins = Instance()
 
@@ -37,13 +38,13 @@ def add(uid, cname, name, desc, flavour_name):
 
 		ins.save()
 	else:
-		raise
+		raise ErrorException(500, "Unable to create new instance")
 
 def get_all_by_compute(cname, uid=None):
 	try:
 		cte = Compute.objects.get(name=cname)
 	except:
-		raise
+		raise ErrorException(404, "No compute found")
 
 	if uid is not None:
 		_data = Instance.objects.filter(compute=cte, uid=uid)

@@ -1,10 +1,15 @@
 #-*- coding: utf8 -*-
+import logging
+
+from lib.exception import ErrorException
 
 from django.http import HttpResponse, QueryDict
 from django.utils import simplejson
 
 from instance.forms import InstanceForm
 from instance.utils import add, get_all_by_compute
+
+logger = logging.getLogger("app")
 
 def index(request, cname):
 	if request.method == 'GET':
@@ -20,7 +25,10 @@ def index(request, cname):
 				'results': data
 			}
 			return HttpResponse(simplejson.dumps(response_data), content_type="application/json")
-		except:
+		except ErrorException, e:
+			return HttpResponse(status=e.code)
+		except Exception, e:
+			logger.error(str(e))
 			return HttpResponse(status=500)
 	elif request.method == 'POST':
 		form = InstanceForm(request.POST)
@@ -37,7 +45,10 @@ def index(request, cname):
 					form.cleaned_data['flavour'])
 
 				return HttpResponse(status=201)
-			except:
+			except ErrorException, e:
+				return HttpResponse(status=e.code)
+			except Exception, e:
+				logger.error(str(e))
 				return HttpResponse(status=500)
 		else:
 			return HttpResponse(status=400)

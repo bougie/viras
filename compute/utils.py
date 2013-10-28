@@ -1,4 +1,5 @@
 #-*- coding: utf8 -*-
+from lib.exception import ErrorException
 
 from compute.models import Compute
 
@@ -20,7 +21,7 @@ def add(name, vcpu, memory, disk, ctype):
 
 		cte.save()
 	else:
-		raise
+		raise ErrorException(500, "Unable ta create new compute")
 
 def delete(name):
 	try:
@@ -32,7 +33,10 @@ def delete(name):
 def edit(name, vcpu, memory, disk, ctype):
 	try:
 		cte = Compute.objects.get(name=name)
+	except:
+		raise ErrorException(404, "Unable ta get compute")
 
+	try:
 		cte.vcpu = vcpu
 		cte.memory = memory
 		cte.disk = disk
@@ -40,7 +44,7 @@ def edit(name, vcpu, memory, disk, ctype):
 
 		cte.save()
 	except:
-		raise
+		raise ErrorException(500, "Unable ta set compute")
 
 def get(name):
 	try:
@@ -55,7 +59,7 @@ def get(name):
 			'ctype': d.ctype
 		}
 	except:
-		raise
+		raise ErrorException(500, "Unable ta get compute")
 
 	return cte
 
@@ -75,6 +79,6 @@ def get_all():
 				'ctype': d.ctype
 			})
 	except:
-		raise
+		raise ErrorException(500, "Unable ta get computes")
 
 	return data
