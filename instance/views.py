@@ -4,11 +4,24 @@ from django.http import HttpResponse, QueryDict
 from django.utils import simplejson
 
 from instance.forms import InstanceForm
-from instance.utils import add
+from instance.utils import add, get_all_by_compute
 
 def index(request, cname):
 	if request.method == 'GET':
-		pass
+		response_data = {}
+
+		uid = 1
+
+		try:
+			data = get_all_by_compute(cname, uid)
+			
+			response_data = {
+				'count': len(data),
+				'results': data
+			}
+			return HttpResponse(simplejson.dumps(response_data), content_type="application/json")
+		except:
+			return HttpResponse(status=500)
 	elif request.method == 'POST':
 		form = InstanceForm(request.POST)
 

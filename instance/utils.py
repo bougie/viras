@@ -38,3 +38,32 @@ def add(uid, cname, name, desc, flavour_name):
 		ins.save()
 	else:
 		raise
+
+def get_all_by_compute(cname, uid=None):
+	try:
+		cte = Compute.objects.get(name=cname)
+	except:
+		raise
+
+	if uid is not None:
+		_data = Instance.objects.filter(compute=cte, uid=uid)
+	else:
+		_data = Instance.objects.filter(compute=cte)
+
+	data = []
+	for d in _data:
+		data.append({
+			'id': d.id,
+			'name': d.name,
+			'desc': d.desc,
+			'vcpu': d.vcpu,
+			'disk': d.disk,
+			'memory': d.memory,
+			'task': d.task,
+			'state': d.state,
+			'power_state': d.power_state,
+			'ipv4': d.ipv4,
+			'ipv6': d.ipv6
+		})
+
+	return data
