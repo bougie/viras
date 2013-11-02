@@ -61,7 +61,7 @@ def settings(request, fid):
 			data = get(fid)
 			
 			response_data = {
-				'count': len(data),
+				'count': 1,
 				'results': data
 			}
 			return HttpResponse(
