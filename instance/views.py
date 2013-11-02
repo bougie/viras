@@ -58,3 +58,22 @@ def index(request, cname):
 	else:
 		return ErrorResponse(status=501)
 
+def settings(request, cname, iname):
+	if request.method == 'GET':
+		try:
+			ins = get(cname, iname)
+
+			response_data = {
+				'count': 1,
+				'results': ins
+			}
+			return HttpResponse(
+				simplejson.dumps(response_data),
+				content_type="application/json")
+		except ErrorException, e:
+			return ErrorResponse(status=e.code)
+		except Exception, e:
+			logger.error(str(e))
+			return ErrorResponse(status=500)
+	else:
+		return ErrorResponse(status=501)

@@ -40,6 +40,32 @@ def add(uid, cname, name, desc, flavour_name):
 	else:
 		raise ErrorException(500, "Unable to create new instance")
 
+def get(cname, iname):
+	try:
+		cte = Compute.objects.get(name=cname)
+	except:
+		raise ErrorException(404, "No compute found")
+
+	try:
+		d = INstance.objects.get(compute=cte, name=iname)
+	except:
+		raise ErrorException(404, "No instance found")
+
+	return {
+		'id': d.id,
+		'uid': d.uid,
+		'name': d.name,
+		'desc': d.desc,
+		'vcpu': d.vcpu,
+		'disk': d.disk,
+		'memory': d.memory,
+		'task': d.task,
+		'state': d.state,
+		'power_state': d.power_state,
+		'ipv4': d.ipv4,
+		'ipv6': d.ipv6
+	}
+
 def get_all_by_compute(cname, uid=None):
 	try:
 		cte = Compute.objects.get(name=cname)
