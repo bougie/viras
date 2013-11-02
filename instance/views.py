@@ -7,8 +7,8 @@ from lib.response import ErrorResponse
 from django.http import HttpResponse, QueryDict
 from django.utils import simplejson
 
-from instance.forms import InstanceForm
-from instance.utils import add, get_all_by_compute
+from instance.forms import InstanceForm, InstanceEditForm
+from instance.utils import add, edit, get, get_all_by_compute
 
 logger = logging.getLogger("app")
 
@@ -75,5 +75,24 @@ def settings(request, cname, iname):
 		except Exception, e:
 			logger.error(str(e))
 			return ErrorResponse(status=500)
+	elif request.method == 'PUT':
+		params = QueryDict(request.body, request.encoding)
+		form = InstanceEditForm(params)
+
+		if form.is_valid():
+			try:
+				edit(
+					cname,
+					iname,
+					form.cleaned_data['desc'])
+
+				return HttpResponse(status=200)
+			except ErrorException, e:
+				return ErrorResponse(status=e.code)
+			except Exception, e:
+				logger.error(str(e))
+				return ErrorResponse(status=500)
+		else:
+			return ErrorResponse(status=400)
 	else:
 		return ErrorResponse(status=501)

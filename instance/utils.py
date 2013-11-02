@@ -40,6 +40,24 @@ def add(uid, cname, name, desc, flavour_name):
 	else:
 		raise ErrorException(500, "Unable to create new instance")
 
+def edit(cname, iname, desc):
+	try:
+		cte = Compute.objects.get(name=cname)
+	except:
+		raise ErrorException(404, "No compute found")
+
+	try:
+		d = Instance.objects.get(compute=cte, name=iname)
+	except:
+		raise ErrorException(404, "No instance found")
+
+	try:
+		d.desc = desc
+
+		d.save()
+	except:
+		raise ErrorException(500, "Unable to set instance")
+
 def get(cname, iname):
 	try:
 		cte = Compute.objects.get(name=cname)
@@ -47,7 +65,7 @@ def get(cname, iname):
 		raise ErrorException(404, "No compute found")
 
 	try:
-		d = INstance.objects.get(compute=cte, name=iname)
+		d = Instance.objects.get(compute=cte, name=iname)
 	except:
 		raise ErrorException(404, "No instance found")
 

@@ -39,3 +39,5 @@
   * desc : description de l'instance
   * flavour : nom de la flavour utilisée comme modele
 
+* GET /compute/{compute_name}/instance/{instance_name} : afficher une instance
+* PUT /compute/{compute_name}/instance/{instance_name} : editer la description d'une instance
