@@ -9,9 +9,11 @@ from django.utils import simplejson
 
 from compute.forms import ComputeForm, ComputeEditForm
 from compute.utils import add, delete, edit, get, get_all
+from auth.decorators import required_auth_query
 
 logger = logging.getLogger("app")
 
+@required_auth_query
 def index(request):
 	if request.method == 'GET':
 		response_data = {}
@@ -54,6 +56,7 @@ def index(request):
 	else:
 		return ErrorResponse(status=501)
 
+@required_auth_query
 def settings(request, cid):
 	if request.method == 'GET':
 		response_data = {}

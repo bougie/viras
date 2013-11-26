@@ -116,7 +116,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 	'compute',
 	'instance',
-	'flavour'
+	'flavour',
+	'keystore',
+	'auth'
 )
 
 # A sample logging configuration. The only tangible logging
