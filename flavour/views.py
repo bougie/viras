@@ -12,6 +12,7 @@ from flavour.utils import add, delete, edit, get, get_all
 
 logger = logging.getLogger("app")
 
+@required_auth_query
 def index(request):
 	if request.method == 'GET':
 		response_data = {}
@@ -53,6 +54,7 @@ def index(request):
 	else:
 		return ErrorResponse(status=501)
 
+@required_auth_query
 def settings(request, fid):
 	if request.method == 'GET':
 		response_data = {}

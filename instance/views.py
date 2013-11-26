@@ -12,6 +12,7 @@ from instance.utils import add, edit, get, get_all_by_compute
 
 logger = logging.getLogger("app")
 
+@required_auth_query
 def index(request, cname):
 	if request.method == 'GET':
 		response_data = {}
@@ -58,6 +59,7 @@ def index(request, cname):
 	else:
 		return ErrorResponse(status=501)
 
+@required_auth_query
 def settings(request, cname, iname):
 	if request.method == 'GET':
 		try:

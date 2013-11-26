@@ -13,6 +13,7 @@ from keystore.utils import api_add, api_delete, api_get, api_get_all, consumer_d
 
 logger = logging.getLogger("app")
 
+@required_auth_query
 def api_index(request):
 	if request.method == 'GET':
 		response_data = {}
@@ -54,6 +55,7 @@ def api_index(request):
 	else:
 		return ErrorResponse(status=501)
 
+@required_auth_query
 def api_settings(request, aid):
 	if request.method == 'GET':
 		response_data = {}
@@ -85,6 +87,7 @@ def api_settings(request, aid):
 	else:
 		return ErrorResponse(status=501)
 
+@required_auth_query
 def consumer_index(request):
 	if request.method == 'GET':
 		response_data = {}
@@ -105,6 +108,7 @@ def consumer_index(request):
 	else:
 		return ErrorResponse(status=501)
 
+@required_auth_query
 def consumer_settings(request, cid):
 	if request.method == 'GET':
 		response_data = {}
