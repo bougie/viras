@@ -1,0 +1,39 @@
+[
+{
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields":
+	{
+        "username": "test", 
+        "first_name": "", 
+        "last_name": "", 
+        "is_active": false, 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "password": "pbkdf2_sha256$10000$idQG8ffrBw4k$74XxGuVCIyaHgOtiGIbFqpMuANWfAX4e1924MS0hs40=", 
+        "email": "test@domain.tld"
+    }
+},
+{
+    "pk": 1, 
+    "model": "account.userconfirm", 
+    "fields":
+	{
+        "flag": 1, 
+        "token": "G98WSL0GXVND45JZ1O45MPLJOBLCIAH86XDPE2AHHM", 
+        "user": 1,
+		"date": "2013-03-10"
+    }
+},
+{
+    "pk": 2, 
+    "model": "account.userconfirm", 
+    "fields":
+	{
+        "flag": 2, 
+        "token": "G98WSL0GXVND45JZ1O45MPLJOBLCIAH86XDPE2AHHM", 
+        "user": 1,
+		"date": "2013-03-10"
+    }
+}
+]

@@ -1,0 +1,38 @@
+[
+{
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields":
+	{
+        "username": "admin", 
+        "first_name": "", 
+        "last_name": "", 
+        "is_active": true, 
+        "is_superuser": true, 
+        "is_staff": true, 
+        "password": "pbkdf2_sha256$10000$k3ZzemmFcL4m$AtkINuegrND3va2JPBBHf2DF0hSUhbRmIRRrudpFAts=", 
+        "email": ""
+    }
+},
+{
+    "pk": 1, 
+    "model": "keystore.ApiKey", 
+    "fields":
+	{
+		"api_key": "194939bB791b4652",
+		"api_secret": "e7a0e2546A864bf5b5f03AD965F0b882",
+		"name": "AdminApp101",
+		"description": "Application pour l'adminstration"
+    }
+},
+{
+    "pk": 1, 
+    "model": "keystore.ConsumerKey", 
+    "fields":
+	{
+        "consumer_key": "7e465fceecb64893BCd2Bcb3C2efAC11", 
+		"expiration": 0,
+        "user": 1
+    }
+}
+]
