@@ -23,7 +23,7 @@ def api_add(name, description):
 	try:
 		akey.save()
 
-		return akey.name
+		return akey.api_key
 	except Exception, e:
 		logger.error(str(e))
 		raise ErrorException(500, "Unable to create new api key")
@@ -57,23 +57,9 @@ def api_exists(akey, asecret):
 
 	return ret
 
-#def api_exists_by_key(akey):
-#	try:
-#		key = ApiKey.objects.get(api_key=akey)
-#
-#		return True
-#	except ApiKey.DoesNotExist, e:
-#		return False
-#	except Exception, e:
-#		logger.error(str(e))
-#		raise ErrorException(500, "Unable to get api key by the key")
-
-def api_get(aid, akey=None):
+def api_get(akey):
 	try:
-		if aid == None and akey is not None:
-			key = ApiKey.objects.get(api_key=akey)
-		else:
-			key = ApiKey.objects.get(name=aid)
+		key = ApiKey.objects.get(api_key=akey)
 
 		return {
 			'id': key.pk,
@@ -97,7 +83,9 @@ def api_get_all():
 			keys_list.append({
 				'id': k.pk,
 				'name': k.name,
-				'description': k.description
+				'description': k.description,
+				'api_key': key.api_key,
+				'api_secret': key.api_secret
 			})
 
 		return keys_list
@@ -146,15 +134,23 @@ def consumer_delete(cid):
 		logger.error(str(e))
 		raise ErrorException(500, "Unable to delete consumer key")
 
-def consumer_get(cid):
+def consumer_get(cid, get_user=None):
 	try:
 		key = ConsumerKey.objects.get(consumer_key=cid)
 
-		return {
-			'id': key.pk,
-			'expiration': key.expiration,
-			'consumer_key': key.consumer_key
-		}
+		if get_user is not None and get_user == True:
+			return {
+				'id': key.pk,
+				'expiration': key.expiration,
+				'consumer_key': key.consumer_key,
+				'user': key.user
+			}
+		else:
+			return {
+				'id': key.pk,
+				'expiration': key.expiration,
+				'consumer_key': key.consumer_key
+			}
 	except ConsumerKey.DoesNotExist, e:
 		raise ErrorException(404, "Unable to get consumer key")
 	except Exception, e:

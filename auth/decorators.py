@@ -29,14 +29,17 @@ def required_auth_query(a_view):
 
 					if 'HTTP_X_VIRAS_SIGNATURE' in request.META and request.META['HTTP_X_VIRAS_SIGNATURE'] == sig:
 						is_auth = True
-						
+
 		except Exception, e:
 			logger.error(str(e))
 
 		if is_auth == True:
 			return a_view(request, *args, **kwargs)
 		else:
-			return ErrorResponse(401)
+			if request.user.is_authenticated():
+				return ErrorResponse(403)
+			else:
+				return ErrorResponse(401)
 
 	return _wrapped_view
 

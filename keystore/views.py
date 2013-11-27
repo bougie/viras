@@ -10,10 +10,11 @@ from django.core.urlresolvers import reverse
 
 from keystore.forms import ApiKeyForm, AuthForm
 from keystore.utils import api_add, api_delete, api_get, api_get_all, consumer_delete, consumer_get, consumer_get_all
+from auth.decorators import required_auth_query
 
 logger = logging.getLogger("app")
 
-@required_auth_query
+#@required_auth_query
 def api_index(request):
 	if request.method == 'GET':
 		response_data = {}
@@ -55,7 +56,7 @@ def api_index(request):
 	else:
 		return ErrorResponse(status=501)
 
-@required_auth_query
+#@required_auth_query
 def api_settings(request, aid):
 	if request.method == 'GET':
 		response_data = {}

@@ -9,6 +9,7 @@ from django.utils import simplejson
 
 from flavour.forms import FlavourForm, FlavourEditForm
 from flavour.utils import add, delete, edit, get, get_all
+from auth.decorators import required_auth_query
 
 logger = logging.getLogger("app")
 

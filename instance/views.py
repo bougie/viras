@@ -9,6 +9,7 @@ from django.utils import simplejson
 
 from instance.forms import InstanceForm, InstanceEditForm
 from instance.utils import add, edit, get, get_all_by_compute
+from auth.decorators import required_auth_query
 
 logger = logging.getLogger("app")
 
