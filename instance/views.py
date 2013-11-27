@@ -18,7 +18,7 @@ def index(request, cname):
 	if request.method == 'GET':
 		response_data = {}
 
-		uid = 1
+		uid = request.user.id
 
 		try:
 			data = get_all_by_compute(cname, uid)
@@ -39,7 +39,7 @@ def index(request, cname):
 		form = InstanceForm(request.POST)
 
 		if form.is_valid():
-			uid = 1
+			uid = request.user.id
 
 			try:
 				add(
