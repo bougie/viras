@@ -13,7 +13,7 @@ from auth.decorators import required_auth_query
 
 logger = logging.getLogger("app")
 
-#@required_auth_query
+@required_auth_query
 def index(request):
 	if request.method == 'GET':
 		response_data = {}
