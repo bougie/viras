@@ -14,7 +14,7 @@ from auth.decorators import required_auth_query
 
 logger = logging.getLogger("app")
 
-#@required_auth_query
+@required_auth_query
 def api_index(request):
 	if request.method == 'GET':
 		response_data = {}
@@ -56,7 +56,7 @@ def api_index(request):
 	else:
 		return ErrorResponse(status=501)
 
-#@required_auth_query
+@required_auth_query
 def api_settings(request, aid):
 	if request.method == 'GET':
 		response_data = {}
