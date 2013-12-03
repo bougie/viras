@@ -43,7 +43,9 @@ def index(request):
 					form.cleaned_data['vcpu'],
 					form.cleaned_data['memory'],
 					form.cleaned_data['disk'],
-					form.cleaned_data['ctype'])
+					form.cleaned_data['ctype'],
+					form.cleaned_data['ipv4'],
+					form.cleaned_data['ipv6'])
 
 				return HttpResponse(status=201)
 			except ErrorException, e:
@@ -87,7 +89,9 @@ def settings(request, cid):
 					form.cleaned_data['vcpu'],
 					form.cleaned_data['memory'],
 					form.cleaned_data['disk'],
-					form.cleaned_data['ctype'])
+					form.cleaned_data['ctype'],
+					form.cleaned_data['ipv4'],
+					form.cleaned_data['ipv6'])
 
 				return HttpResponse(status=200)
 			except ErrorException, e:

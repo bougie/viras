@@ -18,6 +18,8 @@
   * memory : taille de la RAm en Mo
   * disk : taille du disque dur en Go
   * ctype : technologie de virtualisation (xen, jails, zone, vmware)
+  * ipv4 : addresse ipv4 du compute
+  * ipv6 : addresse ipv6 du compute
 
 
 * GET /compute/{compute_name} : afficher un compute
