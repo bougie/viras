@@ -8,3 +8,5 @@ class Compute(models.Model):
 	memory = models.IntegerField()
 	disk  = models.IntegerField()
 	ctype = models.CharField(max_length=6)
+	ipv4 = models.CharField(max_length=15, blank=True, null=True)
+	ipv6 = models.CharField(max_length=40, blank=True, null=True)

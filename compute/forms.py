@@ -10,6 +10,8 @@ class ComputeForm(forms.Form):
 	memory = forms.IntegerField()
 	disk  = forms.IntegerField()
 	ctype = forms.CharField(max_length=6)
+	ipv4 = forms.CharField(max_length=10, required=False)
+	ipv6 = forms.CharField(max_length=50, required=False)
 
 	def clean_name(self):
 		name = self.cleaned_data['name']
@@ -24,3 +26,5 @@ class ComputeEditForm(forms.Form):
 	memory = forms.IntegerField()
 	disk  = forms.IntegerField()
 	ctype = forms.CharField(max_length=6)
+	ipv4 = forms.CharField(max_length=10, required=False)
+	ipv6 = forms.CharField(max_length=50, required=False)

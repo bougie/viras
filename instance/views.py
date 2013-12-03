@@ -9,14 +9,16 @@ from django.utils import simplejson
 
 from instance.forms import InstanceForm, InstanceEditForm
 from instance.utils import add, edit, get, get_all_by_compute
+from auth.decorators import required_auth_query
 
 logger = logging.getLogger("app")
 
+@required_auth_query
 def index(request, cname):
 	if request.method == 'GET':
 		response_data = {}
 
-		uid = 1
+		uid = request.user.id
 
 		try:
 			data = get_all_by_compute(cname, uid)
@@ -37,7 +39,7 @@ def index(request, cname):
 		form = InstanceForm(request.POST)
 
 		if form.is_valid():
-			uid = 1
+			uid = request.user.id
 
 			try:
 				add(
@@ -58,6 +60,7 @@ def index(request, cname):
 	else:
 		return ErrorResponse(status=501)
 
+@required_auth_query
 def settings(request, cname, iname):
 	if request.method == 'GET':
 		try:

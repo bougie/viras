@@ -3,7 +3,7 @@ from lib.exception import ErrorException
 
 from compute.models import Compute
 
-def add(name, vcpu, memory, disk, ctype):
+def add(name, vcpu, memory, disk, ctype, ipv4, ipv6):
 	exists = True
 	try:
 		cte = Compute.objects.get(name=name)
@@ -18,6 +18,8 @@ def add(name, vcpu, memory, disk, ctype):
 		cte.memory = memory
 		cte.disk = disk
 		cte.ctype = ctype
+		cte.ipv4 = ipv4
+		cte.ipv6 = ipv6
 
 		cte.save()
 	else:
@@ -30,7 +32,7 @@ def delete(name):
 	except:
 		raise
 
-def edit(name, vcpu, memory, disk, ctype):
+def edit(name, vcpu, memory, disk, ctype, ipv4, ipv6):
 	try:
 		cte = Compute.objects.get(name=name)
 	except:
@@ -41,6 +43,8 @@ def edit(name, vcpu, memory, disk, ctype):
 		cte.memory = memory
 		cte.disk = disk
 		cte.ctype = ctype
+		cte.ipv4 = ipv4
+		cte.ipv6 = ipv6
 
 		cte.save()
 	except:

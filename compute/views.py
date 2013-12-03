@@ -9,9 +9,11 @@ from django.utils import simplejson
 
 from compute.forms import ComputeForm, ComputeEditForm
 from compute.utils import add, delete, edit, get, get_all
+from auth.decorators import required_auth_query
 
 logger = logging.getLogger("app")
 
+@required_auth_query
 def index(request):
 	if request.method == 'GET':
 		response_data = {}
@@ -41,7 +43,9 @@ def index(request):
 					form.cleaned_data['vcpu'],
 					form.cleaned_data['memory'],
 					form.cleaned_data['disk'],
-					form.cleaned_data['ctype'])
+					form.cleaned_data['ctype'],
+					form.cleaned_data['ipv4'],
+					form.cleaned_data['ipv6'])
 
 				return HttpResponse(status=201)
 			except ErrorException, e:
@@ -54,6 +58,7 @@ def index(request):
 	else:
 		return ErrorResponse(status=501)
 
+@required_auth_query
 def settings(request, cid):
 	if request.method == 'GET':
 		response_data = {}
@@ -84,7 +89,9 @@ def settings(request, cid):
 					form.cleaned_data['vcpu'],
 					form.cleaned_data['memory'],
 					form.cleaned_data['disk'],
-					form.cleaned_data['ctype'])
+					form.cleaned_data['ctype'],
+					form.cleaned_data['ipv4'],
+					form.cleaned_data['ipv6'])
 
 				return HttpResponse(status=200)
 			except ErrorException, e:
