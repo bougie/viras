@@ -1,7 +1,11 @@
 #-*- coding: utf8 -*-
+import logging
+
 from lib.exception import ErrorException
 
 from compute.models import Compute
+
+logger = logging.getLogger("app")
 
 def add(name, vcpu, memory, disk, ctype, ipv4, ipv6):
 	exists = True
@@ -29,13 +33,15 @@ def delete(name):
 	try:
 		cte = Compute.objects.get(name=name)
 		cte.delete()
-	except:
+	except Exception, e:
+		logger.error(str(e))
 		raise
 
 def edit(name, vcpu, memory, disk, ctype, ipv4, ipv6):
 	try:
 		cte = Compute.objects.get(name=name)
-	except:
+	except Exception, e:
+		logger.error(str(e))
 		raise ErrorException(404, "Unable ta get compute")
 
 	try:
@@ -47,7 +53,8 @@ def edit(name, vcpu, memory, disk, ctype, ipv4, ipv6):
 		cte.ipv6 = ipv6
 
 		cte.save()
-	except:
+	except Exception, e:
+		logger.error(str(e))
 		raise ErrorException(500, "Unable ta set compute")
 
 def get(name):
@@ -62,7 +69,8 @@ def get(name):
 			'disk': d.disk,
 			'ctype': d.ctype
 		}
-	except:
+	except Exception, e:
+		logger.error(str(e))
 		raise ErrorException(500, "Unable ta get compute")
 
 	return cte
@@ -82,7 +90,8 @@ def get_all():
 				'disk': d.disk,
 				'ctype': d.ctype
 			})
-	except:
+	except Exception, e:
+		logger.error(str(e))
 		raise ErrorException(500, "Unable ta get computes")
 
 	return data
