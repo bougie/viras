@@ -9,12 +9,13 @@ logger = logging.getLogger("app")
 
 def required_auth_query(a_view):
 	def _wrapped_view(request, *args, **kwargs):
-		body = request.body
+		#body = request.body
+		body = ""
 		is_auth = False
 
 		try:
 			if 'HTTP_X_VIRAS_APPLICATION' in request.META:
-				api = api_get(None, request.META['HTTP_X_VIRAS_APPLICATION'])
+				api = api_get(request.META['HTTP_X_VIRAS_APPLICATION'])
 
 				if 'HTTP_X_VIRAS_CONSUMER' in request.META:
 					cons = consumer_get(request.META['HTTP_X_VIRAS_CONSUMER'])

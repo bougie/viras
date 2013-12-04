@@ -7,7 +7,7 @@ from compute.models import Compute
 
 logger = logging.getLogger("app")
 
-def add(name, vcpu, memory, disk, ctype, ipv4, ipv6):
+def add(name, vcpu, memory, disk, ctype, ipv4 = None, ipv6 = None):
 	exists = True
 	try:
 		cte = Compute.objects.get(name=name)
@@ -75,6 +75,15 @@ def get(name):
 
 	return cte
 
+def get_obj(name):
+	try:
+		return Compute.objects.get(name=name)
+	except Compute.DoesNotExist, e:
+		raise ErrorException(404, "Unable to get compute")
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "Unable ta get compute")
+
 def get_all():
 	data = []
 
@@ -95,3 +104,17 @@ def get_all():
 		raise ErrorException(500, "Unable ta get computes")
 
 	return data
+
+def add_range_ips(compute, rmin, rmax, rmask, mask):
+	rip = ComputeIpRange()
+
+	rip.range_min = rmin
+	rip.range_max = rmax
+	rip.range_mask = rmask
+	rip.mask = mask
+
+	try:
+		rip.save()
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "Unable ta set new ip range for the compute")

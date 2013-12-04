@@ -8,4 +8,8 @@ urlpatterns = patterns('',
 	url(r'^(.+)/instance/(.+)$', 'instance.views.settings'),
 	url(r'^(.+)/$', 'compute.views.settings'),
 	url(r'^(.+)$', 'compute.views.settings'),
+	url(r'^(.+)/ip/$', 'compute.views.ip'),
+	url(r'^(.+)/ip$', 'compute.views.ip'),
+	url(r'^(.+)/ip/(.+)/$', 'compute.views.ip_settings'),
+	url(r'^(.+)/ip/(.+)$', 'compute.views.ip_settings'),
 )

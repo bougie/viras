@@ -27,14 +27,16 @@ class Api:
 		targetUrl = self.baseUrl + path
 
 		body = ""
+		_body = ""
 		if content is not None:
-			body = json.dumps(content)
+			body = content
+			#_body = json.dumps(content)
 			
 		s1 = hashlib.sha1()
 		s1.update("+".join([
 			self.applicationSecret,
 			self.consumerKey,
-			body
+			_body
 		]))
 		sig = "$1$" + s1.hexdigest()
 		queryHeaders = {
@@ -50,8 +52,11 @@ class Api:
 		req = getattr(requests, method.lower())
 
 		result = req(targetUrl, headers=queryHeaders, data=body).text
-        
-		return json.loads(result)
+
+		try:
+			return json.loads(result)
+		except:
+			return {}
 		
 	def requestConsumerKey(self, login, password):
 		targetUrl = self.baseUrl + "/auth"
