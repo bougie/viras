@@ -123,7 +123,7 @@ def ip(request, cname):
 
 		if form.is_valid():
 			try:
-				compute = get_obj(name=name)
+				compute = get_obj(name=cname)
 			except ErrorException, e:
 				return ErrorResponse(status=e.code)
 
@@ -143,6 +143,8 @@ def ip(request, cname):
 				return ErrorResponse(status=500)
 		else:
 			return ErrorResponse(status=400)
+	else:
+		return ErrorResponse(status=501)
 
 @required_auth_query
 def ip_settings(request, cid):
@@ -152,3 +154,5 @@ def ip_settings(request, cid):
 		pass
 	elif request.method == 'DELETE':
 		pass
+	else:
+		return ErrorResponse(status=501)

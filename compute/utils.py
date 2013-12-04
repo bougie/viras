@@ -3,7 +3,7 @@ import logging
 
 from lib.exception import ErrorException
 
-from compute.models import Compute
+from compute.models import Compute, ComputeIpRange
 
 logger = logging.getLogger("app")
 
@@ -112,6 +112,8 @@ def add_range_ips(compute, rmin, rmax, rmask, mask):
 	rip.range_max = rmax
 	rip.range_mask = rmask
 	rip.mask = mask
+
+	rip.compute = compute
 
 	try:
 		rip.save()
