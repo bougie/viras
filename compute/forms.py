@@ -30,7 +30,9 @@ class ComputeEditForm(forms.Form):
 	ipv6 = forms.CharField(max_length=50, required=False)
 
 class ComputeIpRangeForm(forms.Form):
-	range_min = forms.CharField(max_length=15)
-	range_max = forms.CharField(max_length=15)
-	range_mask = forms.CharField(max_length=15)
-	mask = forms.CharField(max_length=15)
+	range_min = forms.CharField(max_length=40)
+	range_max = forms.CharField(max_length=40)
+	range_mask = forms.CharField(max_length=40)
+	mask = forms.CharField(max_length=40)
+	gw = forms.CharField(max_length=40)
+	vers = forms.IntegerField()

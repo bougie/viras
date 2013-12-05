@@ -8,7 +8,7 @@ from django.http import HttpResponse, QueryDict
 from django.utils import simplejson
 
 from compute.forms import ComputeForm, ComputeEditForm, ComputeIpRangeForm
-from compute.utils import add, delete, edit, get, get_obj, get_all, add_range_ips
+from compute.utils import add, delete, edit, get, get_obj, get_all, add_ip_range, get_all_ip_range
 from auth.decorators import required_auth_query
 
 logger = logging.getLogger("app")
@@ -117,7 +117,23 @@ def settings(request, cid):
 @required_auth_query
 def ip(request, cname):
 	if request.method == 'GET':
-		pass
+		response_data = {}
+
+		try:
+			data = get_all_ip_range(cname)
+		
+			response_data = {
+				'count': len(data),
+				'results': data
+			}
+			return HttpResponse(
+				simplejson.dumps(response_data),
+				content_type="application/json")
+		except ErrorException, e:
+			return ErrorResponse(status=e.code)
+		except Exception, e:
+			logger.error(str(e))
+			return ErrorResponse(status=500)
 	elif request.method == 'POST':
 		form = ComputeIpRangeForm(request.POST)
 
@@ -128,12 +144,14 @@ def ip(request, cname):
 				return ErrorResponse(status=e.code)
 
 			try:
-				add_range_ips(
+				add_ip_range(
 					compute,
 					form.cleaned_data['range_min'],
 					form.cleaned_data['range_max'],
 					form.cleaned_data['range_mask'],
-					form.cleaned_data['mask'])
+					form.cleaned_data['mask'],
+					form.cleaned_data['gw'],
+					form.cleaned_data['vers'])
 
 				return HttpResponse(status=201)
 			except ErrorException, e:

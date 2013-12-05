@@ -29,6 +29,24 @@ def add(name, vcpu, memory, disk, ctype, ipv4 = None, ipv6 = None):
 	else:
 		raise ErrorException(500, "Unable ta create new compute")
 
+def add_ip_range(compute, rmin, rmax, rmask, mask, gw, vers):
+	rip = ComputeIpRange()
+
+	rip.range_min = rmin
+	rip.range_max = rmax
+	rip.range_mask = rmask
+	rip.mask = mask
+	rip.gw = gw
+	rip.vers = vers
+
+	rip.compute = compute
+
+	try:
+		rip.save()
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "Unable ta set new ip range for the compute")
+
 def delete(name):
 	try:
 		cte = Compute.objects.get(name=name)
@@ -105,18 +123,28 @@ def get_all():
 
 	return data
 
-def add_range_ips(compute, rmin, rmax, rmask, mask):
-	rip = ComputeIpRange()
-
-	rip.range_min = rmin
-	rip.range_max = rmax
-	rip.range_mask = rmask
-	rip.mask = mask
-
-	rip.compute = compute
+def get_all_ip_range(cname):
+	data = []
 
 	try:
-		rip.save()
+		compute = get_obj(cname)
+	except ErrorException, e:
+		raise ErrorException(e.code, e.value)
+
+	try:
+		_data = ComputeIpRange.objects.filter(compute=compute)
+
+		for d in _data:
+			data.append({
+				'id': d.id,
+				'range_min': d.range_min,
+				'range_max': d.range_max,
+				'range_mask': d.range_mask,
+				'mask': d.range_mask,
+				'gw': d.gw
+			})
 	except Exception, e:
 		logger.error(str(e))
-		raise ErrorException(500, "Unable ta set new ip range for the compute")
+		raise ErrorException(500, "Unable ta get compute's ips")
+
+	return data

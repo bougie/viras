@@ -26,6 +26,17 @@
 * PUT /compute/{compute_name} : editer un compute 
 * DELETE /compute/{compute_name} : supprimer un compute
 
+#### IPs
+
+* GET /compute/{compute_name}/ip : lister les range d'IPs affectees au compute
+* POST /compute/{compute_name}/ip : ajouter un range d'IP
+  * range_min : premiere IP de la plage allouée au compute
+  * range_max : derniere IP de la plage allouée au compute
+  * range_mask : masque reseau a utiliser pour calculer les IPs du range
+  * mask : masque reseau
+  * gw : passerelle a utiliser sur les instances pour ce range d'IPs
+  * vers : version IP (4 ou 6)
+
 
 ### Flavour
 
