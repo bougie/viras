@@ -25,9 +25,12 @@ def add(name, vcpu, memory, disk, ctype, ipv4 = None, ipv6 = None):
 		cte.ipv4 = ipv4
 		cte.ipv6 = ipv6
 
-		cte.save()
+		try:
+			cte.save()
+		except:
+			raise ErrorException(500, "Unable ta create new compute")
 	else:
-		raise ErrorException(500, "Unable ta create new compute")
+		raise ErrorException(404, "Unable ta get compute")
 
 def add_ip_range(compute, rmin, rmax, rmask, mask, gw, vers):
 	rip = ComputeIpRange()
@@ -50,17 +53,26 @@ def add_ip_range(compute, rmin, rmax, rmask, mask, gw, vers):
 def delete(name):
 	try:
 		cte = Compute.objects.get(name=name)
+	except Compute.DoesNotExist, e:
+		raise ErrorException(404, "Unable to get compute")
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "Unable to get compute")
+
+	try:
 		cte.delete()
 	except Exception, e:
 		logger.error(str(e))
-		raise
+		raise ErrorException(500, "Unable to get compute")
 
 def edit(name, vcpu, memory, disk, ctype, ipv4, ipv6):
 	try:
 		cte = Compute.objects.get(name=name)
+	except Compute.DoesNotExist, e:
+		raise ErrorException(404, "Unable to get compute")
 	except Exception, e:
 		logger.error(str(e))
-		raise ErrorException(404, "Unable ta get compute")
+		raise ErrorException(500, "Unable to get compute")
 
 	try:
 		cte.vcpu = vcpu
