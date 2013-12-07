@@ -1,11 +1,13 @@
 # -*- coding: utf8 -*-
+import logging
+
 from lib.exception import ErrorException
 
 from instance.models import Instance
 
 from compute.models import Compute
-import compute.utils as ct
-import flavour.utils as fl
+
+logger = logging.getLogger("app")
 
 def add(uid, cname, name, desc, flavour_name):
 	exists = True
@@ -43,13 +45,19 @@ def add(uid, cname, name, desc, flavour_name):
 def edit(cname, iname, desc):
 	try:
 		cte = Compute.objects.get(name=cname)
-	except:
+	except Compute.DoesNotExist, e:
 		raise ErrorException(404, "No compute found")
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "No compute found")
 
 	try:
 		d = Instance.objects.get(compute=cte, name=iname)
-	except:
+	except Instance.DoesNotExist, e:
 		raise ErrorException(404, "No instance found")
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "No instance found")
 
 	try:
 		d.desc = desc
@@ -61,13 +69,19 @@ def edit(cname, iname, desc):
 def get(cname, iname):
 	try:
 		cte = Compute.objects.get(name=cname)
-	except:
+	except Compute.DoesNotExist, e:
 		raise ErrorException(404, "No compute found")
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "No compute found")
 
 	try:
 		d = Instance.objects.get(compute=cte, name=iname)
-	except:
+	except Instance.DoesNotExist, e:
 		raise ErrorException(404, "No instance found")
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "No instance found")
 
 	return {
 		'id': d.id,
@@ -87,8 +101,11 @@ def get(cname, iname):
 def get_all_by_compute(cname, uid=None):
 	try:
 		cte = Compute.objects.get(name=cname)
-	except:
+	except Compute.DoesNotExist, e:
 		raise ErrorException(404, "No compute found")
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "No compute found")
 
 	if uid is not None:
 		_data = Instance.objects.filter(compute=cte, uid=uid)
@@ -110,5 +127,23 @@ def get_all_by_compute(cname, uid=None):
 			'ipv4': d.ipv4,
 			'ipv6': d.ipv6
 		})
+
+	return data
+
+def get_all_ip(vers = 4):
+	try:
+		_data = Instance.objects.all()
+	except Instance.DoesNotExist, e:
+		_data = []
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "No instances found")
+
+	data = []
+	for d in _data:
+		if vers == 4:
+			data.append(d.ipv4)
+		elif vers == 6:
+			data.append(d.ipv6)
 
 	return data
