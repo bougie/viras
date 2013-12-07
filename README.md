@@ -12,7 +12,8 @@ A term, il supportera :
 
 
 ### Technologie
-
+* Python 2.7
+  * netaddr
 * Django
 * Fabric
 * MySQL ou SQLite

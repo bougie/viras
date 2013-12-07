@@ -1,4 +1,6 @@
 #-*- coding: utf8 -*-
+from netaddr import *
+
 import logging
 
 from lib.exception import ErrorException
@@ -160,3 +162,9 @@ def get_all_ip_range(cname):
 		raise ErrorException(500, "Unable ta get compute's ips")
 
 	return data
+
+def get_next_ip():
+	min_ip = IPNetwork('10.0.0.0/24')
+	max_ip = IPNetwork('10.0.1.0/24')
+
+	return "0.0.0.0"
