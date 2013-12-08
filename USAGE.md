@@ -28,8 +28,8 @@
 
 #### IPs
 
-* GET /compute/{compute_name}/ip : lister les range d'IPs affectees au compute
-* POST /compute/{compute_name}/ip : ajouter un range d'IP
+* GET /compute/{compute_name}/iprange : lister les ranges d'IPs affectes au compute
+* POST /compute/{compute_name}/iprange : ajouter un range d'IP
   * range_min : premiere IP de la plage allouée au compute
   * range_max : derniere IP de la plage allouée au compute
   * range_mask : masque reseau a utiliser pour calculer les IPs du range
