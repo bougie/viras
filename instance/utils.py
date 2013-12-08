@@ -4,8 +4,10 @@ import logging
 from lib.exception import ErrorException
 
 from instance.models import Instance
-
 from compute.models import Compute
+
+import compute.utils as cteutils
+import flavour.utils as flutils
 
 logger = logging.getLogger("app")
 
@@ -13,19 +15,34 @@ def add(uid, cname, name, desc, flavour_name):
 	exists = True
 	try:
 		ins = Instance.objects.get(name=name, uid=uid)
-	except:
+	except Instance.DoesNotExist, e:
 		exists = False
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "Error while testing instance duplication")
 
 	if exists == False:
 		try:
-			flv = fl.get(flavour_name)
-		except:
+			flv = flutils.get(flavour_name)
+		except Exception, e:
+			logger.error(str(e))
 			raise ErrorException(404, "No flavour found")
 
 		try:
-			cte = Compute.objects.get(name=cname)
-		except:
-			raise ErrorException(404, "No compute found")
+			cte = cteutils.get_obj(cname)
+		except ErrorException, e:
+			raise ErrorException(e.code, e.value)
+		except Exception, e:
+			logger.error(str(e))
+			raise ErrorException(500, "")
+
+		try:
+			cte_ips = cteutils.get_all_ip_range(cname)
+		except ErrorException, e:
+			raise ErrorException(e.code, e.value)
+		except Exception, e:
+			logger.error(str(e))
+			raise ErrorException(500, "")
 
 		ins = Instance()
 
@@ -38,18 +55,36 @@ def add(uid, cname, name, desc, flavour_name):
 
 		ins.compute = cte
 
+		try:
+			ips_used = get_all_ips()
+		except:
+			ips_used = []
+
+		if len(cte_ips) > 0:
+			cte_ips = cte_ips[0]
+			ipv4 = cteutils.get_next_ipv4(
+				cte_ips['range_min'],
+				cte_ips['range_max'],
+				cte_ips['range_mask'],
+				ips_used)
+
+			if ipv4 is not None:
+				ins.ipv4 = ipv4
+				
+				#ipv6 = cteutils.generate_ipv6_by_ipv4(ipv4)
+				#if ipv6 is not None:
+				#	ins.ipv6 = ipv6
+
 		ins.save()
 	else:
-		raise ErrorException(500, "Unable to create new instance")
+		raise ErrorException(500, "Instance name already exists")
 
 def edit(cname, iname, desc):
 	try:
-		cte = Compute.objects.get(name=cname)
-	except Compute.DoesNotExist, e:
-		raise ErrorException(404, "No compute found")
+		cte = get_obj(cname)
 	except Exception, e:
 		logger.error(str(e))
-		raise ErrorException(500, "No compute found")
+		raise ErrorException(e.code, e.value)
 
 	try:
 		d = Instance.objects.get(compute=cte, name=iname)
@@ -130,7 +165,7 @@ def get_all_by_compute(cname, uid=None):
 
 	return data
 
-def get_all_ip(vers = 4):
+def get_all_ips(vers = 4):
 	try:
 		_data = Instance.objects.all()
 	except Instance.DoesNotExist, e:

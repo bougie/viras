@@ -163,8 +163,35 @@ def get_all_ip_range(cname):
 
 	return data
 
-def get_next_ip():
-	min_ip = IPNetwork('10.0.0.0/24')
-	max_ip = IPNetwork('10.0.1.0/24')
+def get_next_ipv4(rmin, rmax, mask, ip_used = []):
+	min_ip = IPAddress(rmin)
+	min_ip_net = IPNetwork(rmin + '/' + mask)
+	max_ip = IPAddress(rmax)
+	max_ip_net = IPNetwork(rmax + '/' + mask)
 
-	return "0.0.0.0"
+	if min_ip_net.network == max_ip_net.network:
+		ips_allowed = []
+
+		for ip in list(min_ip_net):
+			if ip >= min_ip and ip <= max_ip:
+				if str(ip) not in ip_used:
+					ips_allowed.append(ip)
+
+		if len(ips_allowed) > 0:
+			return str(ips_allowed[0])
+		else:
+			return None
+	else:
+		return None
+
+def generate_ipv6_by_ipv4(ipv6_prefix, ipv4):
+	try:
+		ip = IPAddress(ipv4)
+	except:
+		return None
+
+	ipv6 = ipv6_prefix + ':' + ipv4.replace('.', ':')
+	try:
+		return str(IPAddress(ipv6))
+	except:
+		return None
