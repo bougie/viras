@@ -4,7 +4,6 @@ from netaddr import *
 import logging
 
 from lib.exception import ErrorException
-
 from compute.models import Compute, ComputeIpRange
 
 logger = logging.getLogger("app")
@@ -13,8 +12,11 @@ def add(name, vcpu, memory, disk, ctype, ipv4 = None, ipv6 = None):
 	exists = True
 	try:
 		cte = Compute.objects.get(name=name)
-	except:
+	except Compute.DoesNotExist, e:
 		exists = False
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "Unable ta create new compute")
 
 	if exists == False:
 		cte = Compute()
@@ -54,12 +56,9 @@ def add_ip_range(compute, rmin, rmax, rmask, mask, gw, vers):
 
 def delete(name):
 	try:
-		cte = Compute.objects.get(name=name)
-	except Compute.DoesNotExist, e:
-		raise ErrorException(404, "Unable to get compute")
-	except Exception, e:
-		logger.error(str(e))
-		raise ErrorException(500, "Unable to get compute")
+		cte = get_obj(name)
+	except ErrorException, e:
+		raise ErrorException(e.code, e.value)
 
 	try:
 		cte.delete()
@@ -69,12 +68,9 @@ def delete(name):
 
 def edit(name, vcpu, memory, disk, ctype, ipv4, ipv6):
 	try:
-		cte = Compute.objects.get(name=name)
-	except Compute.DoesNotExist, e:
-		raise ErrorException(404, "Unable to get compute")
-	except Exception, e:
-		logger.error(str(e))
-		raise ErrorException(500, "Unable to get compute")
+		cte = get_obj(name)
+	except ErrorException, e:
+		raise ErrorException(e.code, e.value)
 
 	try:
 		cte.vcpu = vcpu
@@ -91,21 +87,18 @@ def edit(name, vcpu, memory, disk, ctype, ipv4, ipv6):
 
 def get(name):
 	try:
-		d = Compute.objects.get(name=name)
+		d = get_obj(name)
+	except ErrorException, e:
+		raise ErrorException(e.code, e.value)
 
-		return {
-			'id': d.id,
-			'name': d.name,
-			'vcpu': d.vcpu,
-			'memory': d.memory,
-			'disk': d.disk,
-			'ctype': d.ctype
-		}
-	except Exception, e:
-		logger.error(str(e))
-		raise ErrorException(500, "Unable ta get compute")
-
-	return cte
+	return {
+		'id': d.id,
+		'name': d.name,
+		'vcpu': d.vcpu,
+		'memory': d.memory,
+		'disk': d.disk,
+		'ctype': d.ctype
+	}
 
 def get_obj(name):
 	try:
