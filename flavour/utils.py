@@ -6,8 +6,11 @@ def add(name, vcpu, memory, disk):
 	exists = True
 	try:
 		flv = Flavour.objects.get(name=name)
-	except:
+	except Flavour.DoesNotExist, e:
 		exists = False
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "Unable ta create new flavour")
 
 	if exists == False:
 		flv = Flavour()
@@ -17,26 +20,37 @@ def add(name, vcpu, memory, disk):
 		flv.memory = memory
 		flv.disk = disk
 
-		flv.save()
+		try:
+			flv.save()
+		except Exception, e:
+			logger.error(str(e))
+			raise ErrorException(500, "Unable to create new flavour")
 	else:
-		raise ErrorException(500, "Unable to create new flavour")
+		raise ErrorException(404, "Unable to create new flavour")
 
 def delete(name):
 	try:
 		flv = Flavour.objects.get(name=name)
-	except:
+	except Flavour.DoesNotExist, e:
 		raise ErrorException(404, "Unable to get flavour")
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "Unable to get flavour")
 
 	try:
 		flv.delete()
-	except:
+	except Exception, e:
+		logger.error(str(e))
 		raise ErrorException(500, "Unable to delete flavour")
 
 def edit(name, vcpu, memory, disk):
 	try:
 		flv = Flavour.objects.get(name=name)
-	except:
+	except Flavour.DoesNotExist, e:
 		raise ErrorException(404, "Unable to get flavour")
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "Unable to get flavour")
 
 	try:
 		flv.vcpu = vcpu
@@ -58,8 +72,11 @@ def get(name):
 			'memory': d.memory,
 			'disk': d.disk
 		}
-	except:
+	except Flavour.DoesNotExist, e:
 		raise ErrorException(404, "Unable to get flavour")
+	except Exception, e:
+		logger.error(str(e))
+		raise ErrorException(500, "Unable to get flavour")
 
 	return flv
 
@@ -77,7 +94,8 @@ def get_all():
 				'memory': d.memory,
 				'disk': d.disk
 			})
-	except:
+	except Exception, e:
+		logger.error(str(e))
 		raise ErrorException(500, "Unable to get flavours")
 
 	return data
