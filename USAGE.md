@@ -37,6 +37,8 @@
   * gw : passerelle a utiliser sur les instances pour ce range d'IPs
   * vers : version IP (4 ou 6)
 
+Dans le cas de l'IPv6, range_min et range_max doivent etre egales, Ces deux valeurs designent le prefix IPv6, cad, le "réseau". Le range_mask doit etre de 64.
+L'addresse complete est générée en ajoutant l'IPv4 au prefixe IPv6.
 
 ### Flavour
 
