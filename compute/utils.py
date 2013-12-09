@@ -130,7 +130,7 @@ def get_all():
 
 	return data
 
-def get_all_ip_range(cname, vers=4):
+def get_all_ip_range(cname, vers=None):
 	data = []
 
 	try:
@@ -139,7 +139,10 @@ def get_all_ip_range(cname, vers=4):
 		raise ErrorException(e.code, e.value)
 
 	try:
-		_data = ComputeIpRange.objects.filter(compute=compute, vers=vers)
+		if vers is not None:
+			_data = ComputeIpRange.objects.filter(compute=compute, vers=vers)
+		else:
+			_data = ComputeIpRange.objects.filter(compute=compute)
 
 		for d in _data:
 			data.append({

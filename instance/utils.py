@@ -37,7 +37,7 @@ def add(uid, cname, name, desc, flavour_name):
 			raise ErrorException(500, "")
 
 		try:
-			cte_ips = cteutils.get_all_ip_range(cname)
+			cte_ips = cteutils.get_all_ip_range(cname, 4)
 		except ErrorException, e:
 			raise ErrorException(e.code, e.value)
 		except Exception, e:
