@@ -70,10 +70,19 @@ def add(uid, cname, name, desc, flavour_name):
 
 			if ipv4 is not None:
 				ins.ipv4 = ipv4
-				
-				#ipv6 = cteutils.generate_ipv6_by_ipv4(ipv4)
-				#if ipv6 is not None:
-				#	ins.ipv6 = ipv6
+			
+				try:
+					cte_ipsv6 = cteutils.get_all_ip_range(cname, 6)
+
+					if len(cte_ipsv6) > 0:
+						cte_ipsv6 = cte_ipsv6[0]
+
+					ipv6 = cteutils.generate_ipv6_by_ipv4(cte_ipsv6['range_min'], ipv4)
+					if ipv6 is not None:
+						ins.ipv6 = ipv6
+				except Exception, e:
+					logger.error(str(e))
+					pass
 
 		ins.save()
 	else:

@@ -130,7 +130,7 @@ def get_all():
 
 	return data
 
-def get_all_ip_range(cname):
+def get_all_ip_range(cname, vers=4):
 	data = []
 
 	try:
@@ -139,7 +139,7 @@ def get_all_ip_range(cname):
 		raise ErrorException(e.code, e.value)
 
 	try:
-		_data = ComputeIpRange.objects.filter(compute=compute)
+		_data = ComputeIpRange.objects.filter(compute=compute, vers=vers)
 
 		for d in _data:
 			data.append({
@@ -148,7 +148,8 @@ def get_all_ip_range(cname):
 				'range_max': d.range_max,
 				'range_mask': d.range_mask,
 				'mask': d.range_mask,
-				'gw': d.gw
+				'gw': d.gw,
+				'vers': d.vers
 			})
 	except Exception, e:
 		logger.error(str(e))
@@ -180,11 +181,13 @@ def get_next_ipv4(rmin, rmax, mask, ip_used = []):
 def generate_ipv6_by_ipv4(ipv6_prefix, ipv4):
 	try:
 		ip = IPAddress(ipv4)
-	except:
+	except Exception, e:
+		logger.error(str(e))
 		return None
 
 	ipv6 = ipv6_prefix + ':' + ipv4.replace('.', ':')
 	try:
 		return str(IPAddress(ipv6))
-	except:
+	except Exception, e:
+		logger.error(str(e))
 		return None
